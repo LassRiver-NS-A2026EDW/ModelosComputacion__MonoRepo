@@ -1,0 +1,89 @@
+services:
+  # ─── PostgreSQL ───────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # ─── Django Backend ──────────────────────────────────────────
+  django:
+    build: ./django
+    expose:
+      - "8000"
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      DB_ENGINE: postgresql
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 5432
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ─── Nginx para Django ──────────────────────────────────────
+  django-nginx:
+    image: nginx:alpine
+    expose:
+      - "80"
+    volumes:
+      - ./django/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/app/staticfiles:ro
+      - media_volume:/app/media:ro
+    depends_on:
+      - django
+    networks:
+      - app-network
+
+  # ─── Angular Frontend (SSR) ──────────────────────────────────
+  angular:
+    build: ./angular
+    expose:
+      - "4000"
+    environment:
+      PORT: 4000
+    depends_on:
+      - django
+    networks:
+      - app-network
+
+  # ─── Nginx Global (Reverse Proxy) ───────────────────────────
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - angular
+      - django-nginx
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  app-network:
+    driver: bridge
