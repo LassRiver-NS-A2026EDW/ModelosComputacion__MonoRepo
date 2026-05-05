@@ -1,0 +1,6 @@
+[submodule "angular"]
+	path = angular
+	url = git@github.com:LassRiver-NS-A2026EDW/ModelosComputacion__AngularFrontend.git
+[submodule "django"]
+	path = django
+	url = git@github.com:LassRiver-NS-A2026EDW/ModelosComputacion_DjangoBackend.git
