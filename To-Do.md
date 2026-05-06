@@ -1,10 +1,22 @@
-Este es un archivo de las cosas que hay que hacer a dia de hoy 6/05/2026
+# Tareas Pendientes (Actualizado 06/05/2026)
 
-En primer lugar al momento de crear una reseña, no puedo cambiar su calificacion, se queda en 5 estrellas y la idea no es esa. Hay que poner a funcionar el boto nde resrvar libro en elfront end 
+*Se han completado todas las tareas previas relacionadas a la lógica de negocio, UX/UI, layouts y validaciones de formulario. Ver `DOCS.md` para el detalle de las implementaciones.*
 
-Hay que poner animaciones y camvbios de estado mas atractivos por ejemplo al moento de añadir o quitar un libro de favoritos. Hay que dar utilidad al boorn de notificaciones sin inicar sesion o indicar que se debe inicair sesion, igual al boton de agregar a favratosi o de resrvar libro no pasa nada cuando se precioann sin inicar sesion entonces debe haber lago que indique qeu se dee inciair sesoin. Hay que mejorar un poco la visiblidad de cuando un libro no esta disponible, haciendole algo en rojo o alg oque indqiue ams fuertemetne que noe sta disponible.
+## Sugerencias para Próximos Pasos:
 
-En el registro:
-Hay que mejorar lkos dtos de validac iones por ejemplo para cuando un nombre de usuario es uy largo entonces se debe indicar que es muy largo o cuando la contreña no cumple con algun requisito , se debe indicar de forma mas clara que es lo que falta, tampoco un usuario puede haber nacido mañana o en un dia futuro, de hecho solo deberia poder poner en el calendario que haya nnacido aunque sea en 2020, hay que hacer tambien que si por ejemplo en los formularios hay mas de un error pues se muestre ntodos de manera ordenada, porque pues me va mostrnado uno por uno asi voy validando por ejemplo con mas de 1510 caracteres y me aparecio es eprimero aunque el email tambien este mal y sin formato aunque si avisa. Me gustaria que al momento de que ponemso al contraseña tambien se agrege una validacion e ntimepo real, con indicadores que se vayan poneidno en verdes cuando se cumplan lso requisitos.
+1. **Pruebas E2E (End to End):**
+   - Configurar Cypress o Playwright en el proyecto Angular.
+   - Crear un flujo de prueba automatizado para el registro, login y la reserva de un libro.
 
-Al momento de iniciar sesion, pues el problema serian los mismo qeu cuando uno no incia de la falta como de animaciones y de algunos botones como los de notificaicones pero eso ya se va a ir poniendo a medida que vamos avanzando, por ahora hay que corregir, que hay quie poenr un icono porque aparece una falta de icono arriba del todo de la sidebar y tambie nen el home en el hero, y tambien hay que arreglar un poco el buscador, porque aparece el icono solapado con las eltras, tambien para mejorar la ux entonces habria que poner el buscador solo en las partes donde sirve, que la verdad no estoy seguro de cuales son, al paercer unicament es en la vista de catalago
+2. **Paginación y Carga Diferida:**
+   - Implementar carga infinita (Infinite Scroll) o paginación tradicional en el componente Catálogo (`catalog.component.ts`), ya que actualmente renderiza todos los libros de una vez.
+
+3. **Panel de Administración:**
+   - Crear una interfaz administrativa (solo visible para roles "admin" o "librarian") para poder añadir, editar y eliminar libros del sistema sin tener que usar directamente Django Admin.
+
+4. **Mejora del Perfil de Usuario:**
+   - Permitir a los usuarios subir una foto de perfil y editar sus datos básicos (nombre, apellido).
+   - Mostrar el historial de libros leídos/reservados con fechas.
+
+5. **Notificaciones Reales:**
+   - Sustituir el actual mock de "Bandeja de Notificaciones" por un sistema real utilizando un endpoint del backend (ej. Django Channels para websockets o short-polling).
